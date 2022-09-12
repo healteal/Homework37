@@ -14,10 +14,7 @@ public class General {
         List<Client> clients = Collections.synchronizedList(new LinkedList<>());
         AtomicInteger tables = new AtomicInteger();
         ExecutorService servants = Executors.newFixedThreadPool(3);
-        while (true) {
-            if (clientNumber >= 1000) {
-                break;
-            }
+        while (clientNumber <= 1000) {
             while (tables.get() < 5) {
                 addClient(clients);
                 tables.getAndIncrement();
@@ -29,6 +26,7 @@ public class General {
                         Thread.currentThread().setName("официант " + (servant + 1));
                         for (int j = 0; j < clients.size(); j++) {
                             if (!clients.get(j).isBlocked()) {
+                                clients.get(j).setBlocked(true);
                                 Client client = clients.get(j);
                                 System.out.println(Thread.currentThread().getName()
                                         + " обслужил клиента "
